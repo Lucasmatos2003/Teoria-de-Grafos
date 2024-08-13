@@ -1,70 +1,68 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-#define NUM_ARESTAS 3
-#define NUM_VERTICES 3
+// Definindo o número de vértices e arestas
+#define VERTICES 3
+#define ARESTAS 3
 
-// Função para descrever o grafo
-void grafos_resposta(int grafo[NUM_ARESTAS][NUM_VERTICES]){
-    int ordem = NUM_VERTICES;
-    int tamanho = NUM_ARESTAS;
-
-    printf("Ordem dos vértices: %d\n", ordem);
-    printf("Ordem das arestas: %d\n", tamanho);
-
-    printf("Grau de cada vértice:\n");
-    int graus[NUM_VERTICES] = {0};
-    for(int i = 0; i < NUM_VERTICES; i++){
-        int grau = 0;
-        for(int j = 0; j < NUM_VERTICES; j++){
-            if (grafo[i][j] == 1 || grafo[j][i] == 1){
-                grau++;
-            }
-        }
-        graus[i] = grau;
-        printf("Vértice %d: %d\n", i, grau);
+// Função para calcular o grau de um vértice
+int calcularGrau(int grafo[VERTICES][VERTICES], int vertice) {
+    int grau = 0;
+    for (int i = 0; i < VERTICES; i++) {
+        grau += grafo[vertice][i];
     }
-
-    int grau_maximo = graus[0], grau_minimo = graus[0], soma_graus = 0;
-    for(int i = 0; i < NUM_VERTICES; i++){
-        if (graus[i] > grau_maximo) grau_maximo = graus[i];
-        if (graus[i] < grau_minimo) grau_minimo = graus[i];
-        soma_graus += graus[i];
-    }
-    float grau_medio = (float)soma_graus / NUM_VERTICES;
-
-    printf("Escolha uma opção:\n");
-    printf("1. Grau Médio\n");
-    printf("2. Grau Máximo\n");
-    printf("3. Grau Mínimo\n");
-    int opcao;
-    scanf("%d", &opcao);
-
-    switch(opcao) {
-        case 1:
-            printf("Grau Médio do grafo: %.2f\n", grau_medio);
-            break;
-        case 2:
-            printf("Grau Máximo do grafo: %d\n", grau_maximo);
-            break;
-        case 3:
-            printf("Grau Mínimo do grafo: %d\n", grau_minimo);
-            break;
-        default:
-            printf("Opção inválida!\n");
-            break;
-    }
+    return grau;
 }
 
-int main(){
-    int grafo[NUM_ARESTAS][NUM_VERTICES] = {0};
+int main() {
+    // Criando a matriz de adjacência e inicializando com 0
+    int grafo[VERTICES][VERTICES] = {0};
 
-    // Ajuste para inicializar corretamente o grafo
-    grafo[0][1] = 1;
-    grafo[1][2] = 1;
-    grafo[2][0] = 1;
+    // Adicionando as arestas
+    grafo[0][1] = 1; // Aresta entre o vértice 0 e o vértice 1
+    grafo[1][0] = 1; // Aresta entre o vértice 1 e o vértice 0
+    grafo[1][2] = 1; // Aresta entre o vértice 1 e o vértice 2
+    grafo[2][1] = 1; // Aresta entre o vértice 2 e o vértice 1
+    grafo[0][2] = 1; // Aresta entre o vértice 0 e o vértice 2
+    grafo[2][0] = 1; // Aresta entre o vértice 2 e o vértice 0
 
-    grafos_resposta(grafo);
+    // Exibindo a ordem do grafo (número de vértices)
+    printf("Ordem do grafo: %d\n", VERTICES);
+
+    // Exibindo o tamanho do grafo (número de arestas)
+    printf("Tamanho do grafo: %d\n", ARESTAS);
+
+    // Variáveis para armazenar o grau máximo, médio e mínimo
+    int grauMaximo = 0;
+    int grauMinimo = VERTICES;  // Inicializa com um valor maior para facilitar a comparação
+    int somaGraus = 0;
+
+    // Calculando o grau de cada vértice e identificando os valores máximo, médio e mínimo
+    for (int i = 0; i < VERTICES; i++) {
+        int grau = calcularGrau(grafo, i);
+        printf("Grau do vertice %d: %d\n", i, grau);
+
+        // Atualizando grau máximo e mínimo
+        if (grau > grauMaximo) {
+            grauMaximo = grau;
+        }
+        if (grau < grauMinimo) {
+            grauMinimo = grau;
+        }
+
+        // Acumulando a soma dos graus para calcular a média
+        somaGraus += grau;
+    }
+
+    // Calculando o grau médio
+    float grauMedio = (float)somaGraus / VERTICES;
+
+    // Exibindo grau máximo, médio e mínimo
+    printf("Grau maximo: %d\n", grauMaximo);
+    printf("Grau minimo: %d\n", grauMinimo);
+    printf("Grau medio: %.2f\n", grauMedio);
 
     return 0;
 }
+
 
